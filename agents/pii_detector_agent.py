@@ -4,9 +4,10 @@ from schemas import Ticket, RedactionRequest
 
 _DETECTION_PROMPT = """
 1. Extract every span of personally-identifiable information (PII) from
-the text of the ticket_body. Offsets are 0-based (end is exclusive). Detect at least:
-EMAIL, PHONE, IP, CREDIT_CARD, NATIONAL_ID, FULL_NAME,
-STREET_ADDRESS, DATE_OF_BIRTH.  No prose, no markdown.
+the text of the ticket_body. Offsets are 0-based (end is exclusive).
+Personally Identifiable Information (PII) includes data that can be used to identify, contact, or locate a specific individual. 
+Examples include full name, social security number, driver's license number, passport number, financial account numbers, medical records, email addresses, phone numbers, date of birth, place of birth, ZIP Code, IP addresses. 
+
 2. Formulate a list of PII entities in this format:
 [
   {"start": int, "end": int, "label": str},
@@ -16,6 +17,9 @@ STREET_ADDRESS, DATE_OF_BIRTH.  No prose, no markdown.
 
 """
 
+# ---------------------------------------------------------------------------
+# 🤖 Agent definition
+# ---------------------------------------------------------------------------
 
 pii_detector_agent = Agent(
     name="pii_detector_agent",

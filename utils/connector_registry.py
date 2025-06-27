@@ -16,6 +16,7 @@ logger = logging.getLogger(__name__)
 # 📦 1. Built-in connectors that ship with the repo
 # ---------------------------------------------------------------------------
 _DEFAULT_REGISTRY: Dict[str, str] = {
+    "test": "connectors.test_crm_connector",
     "zendesk": "connectors.zendesk_api_agent",
     # "salesforce": "connectors.salesforce_api_agent",
     # "intercom": "connectors.intercom_api_agent",

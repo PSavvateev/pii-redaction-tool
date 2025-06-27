@@ -5,6 +5,35 @@ from pydantic import BaseModel, Field, ConfigDict, RootModel
 # 🗂️  SCHEMAS (pydantic models)
 # -----------------------------------------------------------------------------
 
+
+# receiving from CRM hook
+class CrmEvent(BaseModel):
+    source: str
+    ticket_id: int
+
+    class ConfigDict:
+        schema_extra = {
+            "example": {
+                "source": "zendesk",
+                "ticket_id": 12
+            }
+        }
+# Ticket Received from CRM (to be passed to PII Detector)
+class Ticket(BaseModel):
+    source: str
+    ticket_id: int
+    ticket_body: str
+
+    class ConfigDict:
+        schema_extra = {
+            "example": {
+                "source": "str",
+                "ticket_id": 12345,
+                "body": "Hello, my email is john@example.com and my SSN is 123-45-6789."
+            }
+        }
+
+# Identified entities for further redaction
 class PIIEntity(BaseModel):
     start: int = Field(..., ge=0)
     end:   int = Field(..., gt=0)
@@ -17,31 +46,17 @@ class PIIEntity(BaseModel):
             "example": {"start": 42, "end": 56, "label": "EMAIL_ADDRESS"}
         }
 
-class PIIEntityList(RootModel[List[PIIEntity]]):
-    """Wrapper so ADK’s output_schema is a real Pydantic model."""
-    pass
-
-class Ticket(BaseModel):
-    ticket_id: int
-    ticket_body: str
-
-    class ConfigDict:
-        schema_extra = {
-            "example": {
-                "ticket_id": 12345,
-                "body": "Hello, my email is john@example.com and my SSN is 123-45-6789."
-            }
-        }
-
-
+# Request on redaction from PII Detector to PII Redactor
 class RedactionRequest(BaseModel):
+    source: str
     ticket_id: int
     ticket_body: str
     entities: List[PIIEntity]
     #strategy: str = Field("tokenize", pattern="^(mask|tokenize|hash)$")
 
-
+# Redacted ticket
 class RedactedTicket(BaseModel):
+    source: str
     ticket_id: int
     ticket_body: str
     entities: List[PIIEntity]
@@ -49,6 +64,7 @@ class RedactedTicket(BaseModel):
     class ConfigDict:
         schema_extra = {
             "example": {
+                "source": "crm",
                 "ticket_id": 12345,
                 "body": "Hello, my email is {{EMAIL:f0e1d2c3}} and my SSN is {{US_SOCIAL_SECURITY_NUMBER:abc12345}}.",
                 "entities": [
@@ -57,3 +73,7 @@ class RedactedTicket(BaseModel):
                 ]
             }
         }
+
+
+class IoRouterPayload(RootModel[CrmEvent |RedactedTicket]):
+    """Either a TicketEvent or an UpdateEvent."""

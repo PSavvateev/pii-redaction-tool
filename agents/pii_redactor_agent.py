@@ -9,6 +9,10 @@ You are a deterministic redaction agent.
 • Return ONLY the tool‑call result as JSON (no prose).
 """
 
+# ---------------------------------------------------------------------------
+# 🤖 Agent definition
+# ---------------------------------------------------------------------------
+
 pii_redactor_agent = Agent(
     name="pii_redactor_agent",
     description="Redacts text according to detected PII entities",
