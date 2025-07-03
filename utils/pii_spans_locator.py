@@ -66,7 +66,7 @@ def locate_pii_spans(text: str, spans: List[Dict[str, str]]) -> List[PIIEntity]:
                 end=match.end(),
                 label=label
             ))
-    print("Check of the function outcome - just for testing:")
-    print(entities)        
+    # print("Check of the function outcome - just for testing:")
+    # print(entities)        
 
     return entities

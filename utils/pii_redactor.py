@@ -17,7 +17,6 @@ def redact_text(
 
 
     def make_token(span: str):
-        # you could use uuid.uuid5 for deterministic tokens, or sha1:
         return hashlib.sha1(span.encode('utf-8')).hexdigest()[:8]
     
     redacted_text = ticket_body
@@ -25,7 +24,7 @@ def redact_text(
     # Sort descending by start so indexes don’t shift
     for e in sorted(pii_entities, key=lambda e: e.start, reverse=True):
         span = redacted_text[e.start : e.end]
-        print(f"Redacting span: '{span}' at [{e.start}:{e.end}] with strategy='{strategy}'")
+        # print(f"Redacting span: '{span}' at [{e.start}:{e.end}] with strategy='{strategy}'")
         if strategy == "mask":
             replacement = "*" * len(span)
         elif strategy == "tokenize":

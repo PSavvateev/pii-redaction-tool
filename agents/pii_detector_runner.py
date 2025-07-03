@@ -40,7 +40,7 @@ async def detect_pii(ticket_body: str) -> list[PIIEntity]:
                         user_id=USER_ID,
                         session_id=session_id
                         )
-    print(f"✅ Session created: {session_id}")   
+    # print(f"✅ Session created: {session_id}")   
   
     # 2. ADK Agent needs the payload wrapped in a Content object:
     message = types.Content(role="user", parts=[types.Part(text=ticket_body)])
