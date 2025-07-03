@@ -18,9 +18,9 @@ class CrmEvent(BaseModel):
                 "ticket_id": 12
             }
         }
+
 # Ticket Received from CRM (to be passed to PII Detector)
 class Ticket(BaseModel):
-    source: str
     ticket_id: int
     ticket_body: str
 
@@ -33,12 +33,10 @@ class Ticket(BaseModel):
             }
         }
 
-# Identified entities for further redaction
+# Identified PII spans (entities) for further redaction
 class PIIEntity(BaseModel):
     start: int = Field(..., ge=0)
-    end:   int = Field(..., gt=0)
-    end:   int = Field(..., ge=1)   # use inclusive minimum so Pydantic emits `"minimum": 1` instead of `"exclusiveMinimum"`
-
+    end:   int = Field(..., ge=1)   
     label: str
 
     class ConfigDict:
@@ -46,21 +44,11 @@ class PIIEntity(BaseModel):
             "example": {"start": 42, "end": 56, "label": "EMAIL_ADDRESS"}
         }
 
-# Request on redaction from PII Detector to PII Redactor
-class RedactionRequest(BaseModel):
-    source: str
-    ticket_id: int
-    ticket_body: str
-    entities: List[PIIEntity]
-    #strategy: str = Field("tokenize", pattern="^(mask|tokenize|hash)$")
-
-# Redacted ticket
+# Final outcome: ticket with redacted body and record of PII entities
 class RedactedTicket(BaseModel):
-    source: str
     ticket_id: int
     ticket_body: str
-    entities: List[PIIEntity]
-
+    pii_entities: List[PIIEntity]
     class ConfigDict:
         schema_extra = {
             "example": {
@@ -75,5 +63,3 @@ class RedactedTicket(BaseModel):
         }
 
 
-class IoRouterPayload(RootModel[CrmEvent |RedactedTicket]):
-    """Either a TicketEvent or an UpdateEvent."""

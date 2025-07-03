@@ -1,20 +1,18 @@
 # redaction_utils.py
 import hashlib
 from typing import List
-from schemas import PIIEntity, RedactedTicket
+from schemas import PIIEntity
 
 def redact_text(
-    ticket_id: int,    
     ticket_body: str,
-    entities: List[PIIEntity],
-    strategy: str = "mask"
-) -> RedactedTicket:
+    pii_entities: List[PIIEntity],
+    strategy: str = "mask" # default
+) -> str:
     """
-    Redacts each span in `entities` within `text` using the given strategy:
-    - mask: replace each character with '*'
-    - tokenize: {{LABEL:deterministic‐token}}
-    - hash:     {{LABEL:sha256‐hex}}
-    Returns a RedactedTicket(ticket_id, ticket_body, entities).
+    Redacts each exact match of `text` from the list of PII entities using the given strategy:
+    - mask:     replace each character with '*'
+    - tokenize: replace with {{LABEL:deterministic-token}}
+    - hash:     replace with {{LABEL:sha256-hex}}
     """
 
 
@@ -25,8 +23,9 @@ def redact_text(
     redacted_text = ticket_body
 
     # Sort descending by start so indexes don’t shift
-    for e in sorted(entities, key=lambda e: e.start, reverse=True):
+    for e in sorted(pii_entities, key=lambda e: e.start, reverse=True):
         span = redacted_text[e.start : e.end]
+        print(f"Redacting span: '{span}' at [{e.start}:{e.end}] with strategy='{strategy}'")
         if strategy == "mask":
             replacement = "*" * len(span)
         elif strategy == "tokenize":
@@ -42,8 +41,4 @@ def redact_text(
         )
     
     
-    return RedactedTicket(
-        ticket_id=ticket_id,
-        ticket_body=redacted_text,
-        entities=entities,
-    )
+    return redacted_text
