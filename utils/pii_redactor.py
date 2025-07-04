@@ -4,7 +4,7 @@ from typing import List
 from schemas import PIIEntity
 
 def redact_text(
-    ticket_body: str,
+    text: str,
     pii_entities: List[PIIEntity],
     strategy: str = "mask" # default
 ) -> str:
@@ -19,7 +19,7 @@ def redact_text(
     def make_token(span: str):
         return hashlib.sha1(span.encode('utf-8')).hexdigest()[:8]
     
-    redacted_text = ticket_body
+    redacted_text = text
 
     # Sort descending by start so indexes don’t shift
     for e in sorted(pii_entities, key=lambda e: e.start, reverse=True):

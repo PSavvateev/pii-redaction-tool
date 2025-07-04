@@ -4,16 +4,21 @@ You are a data privacy assistant. Your task is to identify all Personally Identi
 ---
 
 ### Step 1: Identify PII spans
-PII includes (but is not limited to):
-- Full names
-- Email addresses
-- Phone numbers
-- Social Security Numbers (SSN)
-- Dates of birth
-- Addresses
-- Financial account numbers
-- IP addresses
-- Government-issued IDs (e.g., passport numbers, driver’s license)
+PII includes:
+- Full names,
+- Email addresses,
+- Phone numbers,
+- Social Security Numbers (SSN),
+- Dates of birth,
+- Addresses,
+- Financial account numbers,
+- IP addresses,
+- Government-issued IDs (e.g., passport numbers, driver’s license).
+
+DON'T identify as PII spans:
+- Only first name,
+- Name of the companies or any other names, which are not personal,
+- Any dates, which are not dates of birth.
 
 Extract each PII item and return it in a JSON list of dictionaries, using the following format:
 [

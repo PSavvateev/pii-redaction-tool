@@ -6,7 +6,7 @@ APP_LOGGER_NAME = "pii_redaction_app"
 
 def setup_logger() -> logging.Logger:
     logger = logging.getLogger(APP_LOGGER_NAME)
-    logger.setLevel(logging.INFO)
+    logger.setLevel(logging.DEBUG)
 
     # Prevent adding handlers multiple times in case of re-import
     if not logger.hasHandlers():
@@ -23,7 +23,7 @@ def setup_logger() -> logging.Logger:
     return logger
 
 def silence_third_party_loggers():
-    logging.getLogger("google").setLevel(logging.WARNING)
+    logging.getLogger("google").setLevel(logging.ERROR)
     logging.getLogger("uvicorn").setLevel(logging.WARNING)
     logging.getLogger("asyncio").setLevel(logging.WARNING)
     logging.getLogger("httpcore").setLevel(logging.ERROR)

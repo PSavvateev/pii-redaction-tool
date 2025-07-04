@@ -1,0 +1,174 @@
+{
+  "test_database": [
+    {
+      "id": "2001",
+      "interactions": [
+        {
+          "id": "int-2001-01",
+          "interaction_body": "Hi, I'm Laura Jenkins. I'd like to check my account status."
+        },
+        {
+          "id": "int-2001-02",
+          "interaction_body": "Sure, could you provide your account ID?"
+        },
+        {
+          "id": "int-2001-03",
+          "interaction_body": "My email is laura.jenkins1984@mail.com"
+        }
+      ]
+    },
+    {
+      "id": "2002",
+      "interactions": [
+        {
+          "id": "int-2002-01",
+          "interaction_body": "We received a return request from Mark."
+        },
+        {
+          "id": "int-2002-02",
+          "interaction_body": "Mark's phone is +1-555-843-2233 in case we need to follow up."
+        },
+        {
+          "id": "int-2002-03",
+          "interaction_body": "Return processed successfully."
+        }
+      ]
+    },
+    {
+      "id": "2003",
+      "interactions": [
+        {
+          "id": "int-2003-01",
+          "interaction_body": "Delivery failed at 28th Street. Please recheck the address."
+        },
+        {
+          "id": "int-2003-02",
+          "interaction_body": "Confirmed: 304 West 28th Street, Apt 7A, NY."
+        },
+        {
+          "id": "int-2003-03",
+          "interaction_body": "Reschedule confirmed for Thursday."
+        }
+      ]
+    },
+    {
+      "id": "2004",
+      "interactions": [
+        {
+          "id": "int-2004-01",
+          "interaction_body": "Customer: Ivan Kolesnikov. He requested an update on his order."
+        },
+        {
+          "id": "int-2004-02",
+          "interaction_body": "Shipping code: ABX-4421-22 arrived at warehouse."
+        },
+        {
+          "id": "int-2004-03",
+          "interaction_body": "Follow-up call scheduled tomorrow."
+        }
+      ]
+    },
+    {
+      "id": "2005",
+      "interactions": [
+        {
+          "id": "int-2005-01",
+          "interaction_body": "Complaint received from anonymous user about delayed support."
+        },
+        {
+          "id": "int-2005-02",
+          "interaction_body": "User mentioned ID: 38272931 in the chat."
+        },
+        {
+          "id": "int-2005-03",
+          "interaction_body": "They left a callback number: 020-7888-3322."
+        }
+      ]
+    },
+    {
+      "id": "2006",
+      "interactions": [
+        {
+          "id": "int-2006-01",
+          "interaction_body": "Good morning. Please reset my password."
+        },
+        {
+          "id": "int-2006-02",
+          "interaction_body": "Done. Email reset link sent to joseph@enterprise.io"
+        },
+        {
+          "id": "int-2006-03",
+          "interaction_body": "Let us know if you experience further issues."
+        }
+      ]
+    },
+    {
+      "id": "2007",
+      "interactions": [
+        {
+          "id": "int-2007-01",
+          "interaction_body": "Consultation booked for next Tuesday."
+        },
+        {
+          "id": "int-2007-02",
+          "interaction_body": "Patient name: Dr. Ana Rivera, DOB: 1976-08-19"
+        },
+        {
+          "id": "int-2007-03",
+          "interaction_body": "Confirmed via phone."
+        }
+      ]
+    },
+    {
+      "id": "2008",
+      "interactions": [
+        {
+          "id": "int-2008-01",
+          "interaction_body": "Team received documentation in PDF form."
+        },
+        {
+          "id": "int-2008-02",
+          "interaction_body": "Attached documents include tax ID 332-71-9001."
+        },
+        {
+          "id": "int-2008-03",
+          "interaction_body": "Documents forwarded to finance team."
+        }
+      ]
+    },
+    {
+      "id": "2009",
+      "interactions": [
+        {
+          "id": "int-2009-01",
+          "interaction_body": "User submitted ticket via mobile app."
+        },
+        {
+          "id": "int-2009-02",
+          "interaction_body": "Requested escalation. Email: patrick.dev@workplace.org"
+        },
+        {
+          "id": "int-2009-03",
+          "interaction_body": "Resolution expected within 48 hours."
+        }
+      ]
+    },
+    {
+      "id": "2010",
+      "interactions": [
+        {
+          "id": "int-2010-01",
+          "interaction_body": "Initial claim created by HR team."
+        },
+        {
+          "id": "int-2010-02",
+          "interaction_body": "SSN 890-33-1212 included in uploaded file."
+        },
+        {
+          "id": "int-2010-03",
+          "interaction_body": "Data stored in secure archive."
+        }
+      ]
+    }
+  ]
+}

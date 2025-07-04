@@ -1,65 +1,140 @@
 from typing import List
-from pydantic import BaseModel, Field, ConfigDict, RootModel
+from pydantic import BaseModel, Field, ConfigDict
 
-# -----------------------------------------------------------------------------
-# 🗂️  SCHEMAS (pydantic models)
-# -----------------------------------------------------------------------------
+# ---------------------------------------------------------
+# Sending API request to Data Source
+# ---------------------------------------------------------
 
-
-# receiving from CRM hook
-class CrmEvent(BaseModel):
+class DataSourceRequest(BaseModel):
     source: str
-    ticket_id: int
+    ticket_id: str
 
-    class ConfigDict:
-        schema_extra = {
-            "example": {
-                "source": "zendesk",
-                "ticket_id": 12
-            }
+    model_config = ConfigDict(
+        title="Data Source Request",
+        description="request sent to an external system, containing the data source name and a ticket ID.",
+        json_schema_extra={
+        "example": {
+            "source": "zendesk",
+            "ticket_id": "123456"
         }
+    })
 
-# Ticket Received from CRM (to be passed to PII Detector)
+
+# ---------------------------------------------------------
+# A single customer interaction (e.g. comment, message, email)
+# ---------------------------------------------------------
+
+class Interaction(BaseModel):
+    interaction_id: str
+    interaction_body: str
+    model_config = ConfigDict(
+        title="Interaction",
+        description="A single customer interaction related to the support ticket, such as a message, email, or comment.",
+        json_schema_extra={
+        "example": {
+            "interaction_id": "abc789",
+            "interaction_body": "Hi, my name is John Doe. My email is john@example.com."
+        }
+    })
+
+
+
+# ---------------------------------------------------------
+# Ticket received from data source with interactions
+# ---------------------------------------------------------
+
 class Ticket(BaseModel):
-    ticket_id: int
-    ticket_body: str
-
-    class ConfigDict:
-        schema_extra = {
-            "example": {
-                "source": "str",
-                "ticket_id": 12345,
-                "body": "Hello, my email is john@example.com and my SSN is 123-45-6789."
-            }
+    ticket_id: str
+    interactions: List[Interaction]
+    model_config = ConfigDict(
+        title="Ticket",
+        description="A support ticket that includes a unique ID and a list of associated customer interactions.",
+        json_schema_extra={
+        "example": {
+            "ticket_id": "123456",
+            "interactions": [
+                {
+                    "interaction_id": "abc789",
+                    "interaction_body": "Hi, my name is John Doe. My email is john@example.com."
+                },
+                {
+                    "interaction_id": "def456",
+                    "interaction_body": "Please reach out at +1-202-555-0100 if you need more info."
+                }
+            ]
         }
+    })
 
-# Identified PII spans (entities) for further redaction
+
+# ---------------------------------------------------------
+# A single detected PII span
+# ---------------------------------------------------------
+
 class PIIEntity(BaseModel):
     start: int = Field(..., ge=0)
-    end:   int = Field(..., ge=1)   
+    end: int = Field(..., ge=1)
     label: str
-
-    class ConfigDict:
-        schema_extra = {
-            "example": {"start": 42, "end": 56, "label": "EMAIL_ADDRESS"}
+    model_config = ConfigDict(
+        title="PII Entity",
+        description="A span of text identified as personally identifiable information (PII), with start and end character positions and a label.",
+        json_schema_extra={
+        "example": {
+            "start": 18,
+            "end": 27,
+            "label": "email"
         }
+    })
 
-# Final outcome: ticket with redacted body and record of PII entities
-class RedactedTicket(BaseModel):
-    ticket_id: int
-    ticket_body: str
+
+# ---------------------------------------------------------
+# Final output: redacted Interaction and Redacted Ticket
+# ---------------------------------------------------------
+
+class RedactedInteraction(BaseModel):
+    interaction_id: str
+    interaction_body: str
     pii_entities: List[PIIEntity]
-    class ConfigDict:
-        schema_extra = {
-            "example": {
-                "source": "crm",
-                "ticket_id": 12345,
-                "body": "Hello, my email is {{EMAIL:f0e1d2c3}} and my SSN is {{US_SOCIAL_SECURITY_NUMBER:abc12345}}.",
-                "entities": [
-                    {"start": 18, "end": 36, "label": "EMAIL_ADDRESS"},
-                    {"start": 53, "end": 64, "label": "US_SOCIAL_SECURITY_NUMBER"}
-                ]
-            }
+    model_config = ConfigDict(
+        title="Redacted Interaction",
+        description="A customer interaction with redacted text and metadata about identified PII spans.",
+        json_schema_extra={
+        "example": {
+            "interaction_id": "abc789",
+            "interaction_body": "Hi, my name is **********. My email is *********************.",
+            "pii_entities": [
+                {"start": 11, "end": 21, "label": "name"},
+                {"start": 33, "end": 53, "label": "email"}
+            ]
         }
+    })
 
 
+class RedactedTicket(BaseModel):
+    ticket_id: str
+    interactions: List[RedactedInteraction]
+    model_config = ConfigDict(
+        title="Redacted Ticket",
+        description="Final redaction result for a support ticket, containing all redacted interactions and their detected PII entities.",
+        json_schema_extra={
+        "example": {
+            "ticket_id": "123456",
+            "interactions": [
+                {
+                    "interaction_id": "abc789",
+                    "interaction_body": "Hi, my name is **********. My email is *********************.",
+                    "pii_entities": [
+                                {"start": 11, "end": 21, "label": "name"},
+                                {"start": 33, "end": 53, "label": "email"}
+                                ]
+                },
+                {
+                    "interaction_id": "def456",
+                    "interaction_body": "Please reach out at *************** if you need more info.",
+                    "pii_entities": [
+                                {"start": 24, "end": 42, "label": "phone_number"}
+                                ]
+                }
+            ]
+           
+        }
+    })
