@@ -29,7 +29,7 @@ Why redaction matters under *GDPR*:
 - ✅ Support data minimization, keeping only the data that's truly necessary.
 - ✅ Reduce risk when data is shared, stored, or processed—especially by third parties or internal teams not authorized to access PII.
 
-##  ⚙️ Tool Functionality
+## ⚙️ Functionality
 
 ###  General Workflow (System-to-System Integration)
 1. Customer interactions — such as support tickets, messages, chats or emails — are stored in a connected data source (e.g., CRM, analytics platform, or internal database).
@@ -45,7 +45,7 @@ Multiple connectors can be supported simultaneously, making the app easily exten
 In some cases (like with Zendesk integration) redaction executed on the CRM level, the app should only detect PIIs.
 4. The ticket content is updated in the CRM with the redacted version — seamlessly and automatically.
 
-### Redaction Strategies
+###  Redaction Strategies
 
 The app supports multiple redaction strategies to handle detected PII.  
 
@@ -55,7 +55,38 @@ The app supports multiple redaction strategies to handle detected PII.
 | `tokenize` | Replaces the PII with a structured placeholder that includes the type.      | `Email: [PII::email]`                 |
 | `hash`     | Replaces the PII with a hashed version (useful for anonymized comparisons). | `Email: 6f8db599de986fab7a21625b7916589c` |
 
-> ℹ️ **Default strategy:** `mask`
+ℹ️ **Default strategy:** `mask`
+
+## 🔌 Creating and Using Connectors
+
+To integrate with a new CRM or data platform, implement a connector module that defines two functions:
+```python
+
+def fetch_ticket(source: str, ticket_id: str) -> Ticket: ...
+def update_ticket(source: str, redacted_ticket: RedactedTicket) -> None: ...
+
+
+```
+
+Requirements:
+- The connector must reside in connectors/ and be registered in connector_registry.py.
+- The source string passed to the app (e.g. "zendesk", "mock") is used to route to the correct connector.
+
+A test/mock connector  is included out of the box under `connectors/test_crm_connector.py`. This allows testing the system end-to-end without any real data source
+
+You can use it by sending this payload to the `/ticket` endpoint:
+```json
+
+{
+  "source": "test",
+  "ticket_id": 101
+}
+
+
+```
+
+
+
 
 ## 🚀 Setup & Deployment
 
