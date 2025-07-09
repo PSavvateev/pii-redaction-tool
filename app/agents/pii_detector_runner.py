@@ -4,10 +4,10 @@ import asyncio
 import json
 from google.adk.sessions import InMemorySessionService
 from google.adk.runners import Runner, types
-from agents.pii_detector_agent import pii_detector_agent
-from schemas import PIIEntity
+from .pii_detector_agent import pii_detector_agent
+from app.schemas import PIIEntity
 
-from utils.markdown_stripper import strip_markdown
+from app.utils.markdown_stripper import strip_markdown
 
 
 APP_NAME  = "pii_redaction_app"

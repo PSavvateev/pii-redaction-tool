@@ -1,6 +1,6 @@
 import re
    
-from schemas import PIIEntity
+from app.schemas import PIIEntity
 from typing import List, Dict
 
 

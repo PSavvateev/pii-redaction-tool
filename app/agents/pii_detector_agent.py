@@ -1,6 +1,7 @@
+
 from google.adk import Agent              
-from agents.prompts import DETECTION_PROMPT
-from utils.pii_spans_locator import locate_pii_spans
+from .prompts import DETECTION_PROMPT
+from app.utils.pii_spans_locator import locate_pii_spans
 
 
 pii_detector_agent = Agent(

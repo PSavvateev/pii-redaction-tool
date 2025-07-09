@@ -1,5 +1,3 @@
-# logger_config.py
-
 import logging
 
 APP_LOGGER_NAME = "pii_redaction_app"

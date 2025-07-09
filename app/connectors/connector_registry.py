@@ -1,10 +1,10 @@
 from importlib import import_module
-from schemas import RedactedTicket
+from app.schemas import RedactedTicket
 
 _CONNECTORS = {
-    "test": "connectors.test_crm_connector",
-    "zendesk":  "connectors.zendesk_crm_connector",
-    "salesforce": "connectors.zendesk_crm_connector",
+    "test": "app.connectors.test_crm_connector",
+    "zendesk":  "app.connectors.zendesk_crm_connector",
+    "salesforce": "app.connectors.zendesk_crm_connector",
 }
 
 def fetch_ticket(source: str, ticket_id: int):

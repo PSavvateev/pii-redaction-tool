@@ -8,7 +8,7 @@
 import json
 import os
 
-from schemas import Ticket, RedactedTicket, Interaction
+from app.schemas import Ticket, RedactedTicket, Interaction
  
 # Load JSON from file
 with open(os.path.join(os.path.dirname(__file__), "test_db.json"), "r", encoding="utf-8") as f:
