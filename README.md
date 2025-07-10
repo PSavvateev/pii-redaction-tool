@@ -32,18 +32,13 @@ Why redaction matters under *GDPR*:
 ## ⚙️ Functionality
 
 ###  General Workflow (System-to-System Integration)
+![General Workflow](docs/images/general-workflow.svg)
+
 1. Customer interactions — such as support tickets, messages, chats or emails — are stored in a connected data source (e.g., CRM, analytics platform, or internal database).
 2. The app retrieves ticket data via a pre-configured API connector, using a unique ticket ID.
 Multiple connectors can be supported simultaneously, making the app easily extendable.
 3. The app analyzes the ticket content, detects any PII, and applies redaction according to the configured strategy.
 4. The redacted ticket is then pushed back to the original system, replacing the unredacted version.
-
-###  CRM-Agent Workflow (Manual Trigger via Webhook)
-1. A support agent opens a ticket in the CRM and clicks a pre-configured "Redact PII" button.
-2. This button triggers a webhook to the app, passing the ticket ID and CRM source.
-3. The app fetches the ticket, scans for PII, and performs redaction. 
-In some cases (like with Zendesk integration) redaction executed on the CRM level, the app should only detect PIIs.
-4. The ticket content is updated in the CRM with the redacted version.
 
 ### LLM Agent
 The main 'decision making' module of the app is an PII-identifying agent - the LLM-agent built using Google ADK framework - which requires access to Google API.
@@ -87,60 +82,11 @@ _CONNECTORS = {
 - The source string passed to the app (e.g. "zendesk", "test") is used to route to the correct connector.
 
 A test/mock connector  is included out of the box under `connectors/test_crm_connector.py`. This allows testing the system end-to-end without any real data source
-Test connector uses local file as a tickets database example located `connectors/test_db.json`
+Test connector uses local file as a tickets database example located `connectors/mock_db.json`
 You can use it by sending this payload to the `/ticket/test/{ticket_id}` endpoint.
 
-## 🔌 Using Zendesk connector [CRM-Agent Workflow]
-
-## 🛠️ Tech Details
-### Project Structure
-```text
-📂 app/
-│
-├── main.py                         # FastAPI entry point and routes
-│
-├── requirements.txt                # Python dependencies
-├── .env                            # Environment variables (e.g., API keys)
-├── README.md                       # Project documentation
-│
-├── 📂 config/                      # App-level configurations
-│   └── logger_config.py            # Logger setup and format
-│
-├── 📂 models/                             
-│   └── pydentic_models.py          # Pydentic data models
-│
-├── 📂 agents/                      # Google ADK LLM agent(s)
-│   ├── pii_detector_agent.py       # LLM interface for identifying PII
-│   ├── pii_detector_runner.py      # Runner to initialize the agent
-│   └── prompts.py                  # Prompt templates for LLM
-│
-├── 📂 connectors/                  # API connectors
-│   ├── connector_registry.py       # Register/load external service connectors
-│   ├── test_crm_connector.py       # Example CRM connector
-│   └── mock_db.json                # Test local DB data
-│
-├── 📂 services/                    # Core logic and business services
-│   └── redaction_service.py        # Main workflow: fetch, detect, redact, update
-│
-└── 📂 utils/                      # Utility functions
-    ├── markdown_stripper.py        # Clean markdown artifacts from LLM output
-    ├── pii_redactor.py             # Redaction logic
-    └── pii_spans_locator.py        # Identify spans in the text for redaction
-```
-
-
-### Stack
-- 🐍 Python v3.13
-- 🚀 FastAPI 
-- 🤖 Google ADK (Agent Development Kit) v1.5.0
-### Versions
-#### Curent Version
-v.1.0.0 (10 Jul)
-
 ## 🚀 Setup & Deployment
-
 ### Prerequisites
-
 Make sure you have the following installed on your system:
 
 * **Python 3.13**
@@ -149,13 +95,13 @@ Make sure you have the following installed on your system:
 * **Virtual environment support** (`venv`)
 - (Optional) **Docker**
 
-#### Getting google API key (for LLM agent setup)
+### Getting google API key (for LLM agent setup)
+
 Go to the [Google API Console](https://aistudio.google.com/apikey).
 
 ---
 
 ### Clone the Repository
-
 ```bash
 git clone https://github.com/PSavvateev/pii-redaction-tool.git
 cd pii-redaction-tool
@@ -164,7 +110,6 @@ cd pii-redaction-tool
 ---
 
 ### Create Virtual Environment
-
 Create and activate a virtual environment:
 
 ```bash
@@ -176,7 +121,6 @@ venv\Scripts\activate         # On Windows
 ---
 
 ### Install Dependencies
-
 Install the required packages from `requirements.txt`:
 
 ```bash
@@ -186,7 +130,6 @@ pip install -r requirements.txt
 ---
 
 ### Environment Variables
-
 Create a `.env` file in the project root. You can start from the provided `.env.example`:
 
 ```bash
@@ -212,7 +155,6 @@ REDACTION_STRATEGY=mask
 ---
 
 ### Run the App Locally
-
 To start the FastAPI app locally:
 
 ```bash
@@ -224,7 +166,6 @@ It will be available at [http://localhost:8000](http://localhost:8000).
 ---
 
 ### Optional: Run with Docker
-
 1. Build the Docker image:
 
 ```bash
@@ -234,7 +175,6 @@ docker build -t pii-redaction-tool .
 ```
 
 2. Run the container:
-
 ```bash
 
 docker run -p 8000:8000 --env-file .env pii-redaction-tool
@@ -242,20 +182,61 @@ docker run -p 8000:8000 --env-file .env pii-redaction-tool
 ```
 
 ### Run a Test Request (Optional)
-
 Use `curl` or Postman to simulate an incoming webhook:
 
 ```bash
-curl -X POST http://localhost:8000/ticket \
-     -H "x-api-key: your_api_key_here" \
-     -H "Content-Type: application/json" \
-     -d '{
-           "source": "zendesk",
-           "ticket_id": 101
-         }'
+curl -X GET http://localhost:8000/ticket/test/2001 \
+     -H "x-api-key: your_api_key_here"
 ```
 
 ---
 
+- `http://localhost:8000` – Your local FastAPI server.
+- `test` as the data source.
+- `2001` as the ticket ID you want to fetch.
+- `-H "x-api-key: your_api_key_here"` – replace with your actual API key for authentication.
 
+---
+
+
+
+
+## 🛠️ Tech Details
+### Project Structure
+```text
+📂 app/
+│
+├── main.py                         # FastAPI entry point and routes
+││
+├── 📂 config/                      # App-level configurations
+│   └── logger_config.py            # Logger setup and format
+│
+├── 📂 models/                             
+│   └── pydentic_models.py          # Pydentic data models
+│
+├── 📂 agents/                      # Google ADK LLM agent(s)
+│   ├── pii_detector_agent.py       # LLM interface for identifying PII
+│   ├── pii_detector_runner.py      # Runner to initialize the agent
+│   └── prompts.py                  # Prompt templates for LLM
+│
+├── 📂 connectors/                  # API connectors
+│   ├── connector_registry.py       # Register/load external service connectors
+│   ├── test_crm_connector.py       # Example CRM connector
+│   └── mock_db.json                # Test local DB data
+│
+├── 📂 services/                    # Core logic and business services
+│   └── redaction_service.py        # Main workflow: fetch, detect, redact, update
+│
+└── 📂 utils/                      # Utility functions
+    ├── markdown_stripper.py        # Clean markdown artifacts from LLM output
+    ├── pii_redactor.py             # Redaction logic
+    └── pii_spans_locator.py        # Identify spans in the text for redaction
+```
+
+### Stack
+- 🐍 Python v3.13
+- 🚀 FastAPI 
+- 🤖 Google ADK (Agent Development Kit) v1.5.0
+### Versions
+- **v1.0.0** (10 Jul 2025)
 
