@@ -83,7 +83,7 @@ _CONNECTORS = {
 
 A test/mock connector  is included out of the box under `connectors/test_crm_connector.py`. This allows testing the system end-to-end without any real data source
 Test connector uses local file as a tickets database example located `connectors/mock_db.json`
-You can use it by sending this payload to the `/ticket/test/{ticket_id}` endpoint.
+You can use it by sending this payload to the `/ticket-redaction/test/{ticket_id}` endpoint.
 
 ## 🚀 Setup & Deployment
 ### Prerequisites
@@ -185,7 +185,7 @@ docker run -p 8000:8000 --env-file .env pii-redaction-tool
 Use `curl` or Postman to simulate an incoming webhook:
 
 ```bash
-curl -X GET http://localhost:8000/ticket/test/2001 \
+curl -X GET http://localhost:8000/ticket-redaction/test/2001 \
      -H "x-api-key: your_api_key_here"
 ```
 
