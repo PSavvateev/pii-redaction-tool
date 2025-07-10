@@ -1,5 +1,5 @@
 from importlib import import_module
-from app.schemas import RedactedTicket
+from app.models.pydentic_model import RedactedTicket
 
 _CONNECTORS = {
     "test": "app.connectors.test_crm_connector",

@@ -1,11 +1,11 @@
-from app.schemas import DataSourceRequest, RedactedTicket, Ticket, Interaction, RedactedInteraction
+from app.models.pydentic_model import DataSourceRequest, RedactedTicket, Ticket, Interaction, RedactedInteraction
 from typing import List
 from app.connectors.connector_registry import fetch_ticket, update_ticket
 from app.utils.pii_redactor import redact_text
 from app.agents.pii_detector_runner import detect_pii
 
 
-from app.logger_config import setup_logger
+from app.config.logger_config import setup_logger
 logger = setup_logger()
 
 

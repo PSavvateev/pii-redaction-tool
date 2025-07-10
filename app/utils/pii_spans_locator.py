@@ -1,6 +1,6 @@
 import re
    
-from app.schemas import PIIEntity
+from app.models.pydentic_model import PIIEntity
 from typing import List, Dict
 
 

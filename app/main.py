@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
 from fastapi.security.api_key import APIKeyHeader
 
-from .schemas import RedactedTicket, DataSourceRequest
+from .models.pydentic_model import RedactedTicket, DataSourceRequest
 from .services.redaction_service import redact_ticket
 
 from dotenv import load_dotenv

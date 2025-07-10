@@ -1,7 +1,7 @@
 # redaction_utils.py
 import hashlib
 from typing import List
-from app.schemas import PIIEntity
+from app.models.pydentic_model import PIIEntity
 
 def redact_text(
     text: str,

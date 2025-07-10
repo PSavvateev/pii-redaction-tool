@@ -5,7 +5,7 @@ import json
 from google.adk.sessions import InMemorySessionService
 from google.adk.runners import Runner, types
 from .pii_detector_agent import pii_detector_agent
-from app.schemas import PIIEntity
+from app.models.pydentic_model import PIIEntity
 
 from app.utils.markdown_stripper import strip_markdown
 

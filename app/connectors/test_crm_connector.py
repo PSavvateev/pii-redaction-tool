@@ -8,14 +8,14 @@
 import json
 import os
 
-from app.schemas import Ticket, RedactedTicket, Interaction
+from app.models.pydentic_model import Ticket, RedactedTicket, Interaction
  
 # Load JSON from file
-with open(os.path.join(os.path.dirname(__file__), "test_db.json"), "r", encoding="utf-8") as f:
+with open(os.path.join(os.path.dirname(__file__), "mock_db.json"), "r", encoding="utf-8") as f:
     raw_data = json.load(f)
 
 # Convert list of tickets into a dict for easy lookup by ticket ID
-RAW_DB = {t["id"]: t for t in raw_data["test_database"]}
+RAW_DB = {t["id"]: t for t in raw_data["mock_database"]}
 
 
 
