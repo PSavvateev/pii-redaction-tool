@@ -93,7 +93,42 @@ You can use it by sending this payload to the `/ticket/test/{ticket_id}` endpoin
 ## 🔌 Using Zendesk connector [CRM-Agent Workflow]
 
 ## 🛠️ Tech Details
-### App Architecture
+### Project Structure
+```text
+📂 app/
+│
+├── main.py                         # FastAPI entry point and routes
+│
+├── requirements.txt                # Python dependencies
+├── .env                            # Environment variables (e.g., API keys)
+├── README.md                       # Project documentation
+│
+├── 📂 config/                      # App-level configurations
+│   └── logger_config.py            # Logger setup and format
+│
+├── 📂 models/                             
+│   └── pydentic_models.py          # Pydentic data models
+│
+├── 📂 agents/                      # Google ADK LLM agent(s)
+│   ├── pii_detector_agent.py       # LLM interface for identifying PII
+│   ├── pii_detector_runner.py      # Runner to initialize the agent
+│   └── prompts.py                  # Prompt templates for LLM
+│
+├── 📂 connectors/                  # API connectors
+│   ├── connector_registry.py       # Register/load external service connectors
+│   ├── test_crm_connector.py       # Example CRM connector
+│   └── mock_db.json                # Test local DB data
+│
+├── 📂 services/                    # Core logic and business services
+│   └── redaction_service.py        # Main workflow: fetch, detect, redact, update
+│
+└── 📂 utils/                      # Utility functions
+    ├── markdown_stripper.py        # Clean markdown artifacts from LLM output
+    ├── pii_redactor.py             # Redaction logic
+    └── pii_spans_locator.py        # Identify spans in the text for redaction
+```
+
+
 ### Stack
 - 🐍 Python v3.13
 - 🚀 FastAPI 
