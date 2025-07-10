@@ -32,7 +32,7 @@ Why redaction matters under *GDPR*:
 ## ⚙️ Functionality
 
 ###  General Workflow (System-to-System Integration)
-![General Workflow](docs/images/general-workflow.svg)
+![General Workflow](docs/images/general-workflow.png)
 
 1. Customer interactions — such as support tickets, messages, chats or emails — are stored in a connected data source (e.g., CRM, analytics platform, or internal database).
 2. The app retrieves ticket data via a pre-configured API connector, using a unique ticket ID.
